@@ -10,7 +10,7 @@ stars.forEach(([x]) => {
   stars.forEach(([, y]) => {
     let covered = 0;
     stars.forEach(([sx, sy]) => {
-      if (x <= sx && sx <= x + l && y <= sy && sy <= y + l) {
+      if (x <= sx && sx <= x + l && y - l <= sy && sy <= y) {
         covered += 1;
       }
     });
