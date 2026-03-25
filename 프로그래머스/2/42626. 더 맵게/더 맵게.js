@@ -68,7 +68,7 @@ function solution(scoville, K) {
   scoville.forEach(s => minHeap.push(s));
 
   let answer = 0;
-  while (minHeap.heap.some(s => s < K) && minHeap.size() > 1) {
+  while (minHeap.peek() < K && minHeap.size() > 1) {
     answer += 1;
     let a = minHeap.pop();
     let b = minHeap.pop();
@@ -76,10 +76,5 @@ function solution(scoville, K) {
     minHeap.push(newScoville);
   }
 
-  if (minHeap.size > 1) {
-    return answer;
-  } else {
-    if (minHeap.pop() >= K) return answer;
-    return -1;
-  }
+  return minHeap.peek() >= K ? answer : -1;
 }
