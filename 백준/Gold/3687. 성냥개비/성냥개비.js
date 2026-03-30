@@ -3,16 +3,18 @@ const input = fs.readFileSync(0, "utf-8").trim().split("\n");
 
 const cases = input.slice(1).map(Number);
 
+const APPEND_DIGIT = ["1", "7", "4", "2", "0", "8"];
+
 const getMinNum = matches => {
   const dp = [null, null, 1n, 7n, 4n, 2n, 6n, 8n];
-  const digits = [null, null, "1", "7", "4", "2", "0", "8"];
 
   for (let i = 8; i <= matches; i++) {
-    dp[i] = Infinity;
-    for (let j = 2; j < 8; j++) {
-      if (i - j < 2) continue;
-      let candidate = BigInt(String(dp[i - j]) + digits[j]);
-      if (dp[i] > candidate) dp[i] = candidate;
+    dp[i] = null;
+    for (let cost = 2; cost <= 7; cost++) {
+      const prev = i - cost;
+      if (prev < 2 || dp[prev] === null) continue;
+      const candidate = BigInt(String(dp[prev]) + APPEND_DIGIT[cost - 2]);
+      if (dp[i] === null || candidate < dp[i]) dp[i] = candidate;
     }
   }
 
@@ -20,12 +22,8 @@ const getMinNum = matches => {
 };
 
 const getMaxNum = matches => {
-  if (matches === 3) return 7;
-  let max = "1".repeat(Math.floor(matches / 2));
-  if (matches % 2) {
-    return "7" + max.slice(1);
-  }
-  return max;
+  const ones = "1".repeat(Math.floor(matches / 2));
+  return matches % 2 ? "7" + ones.slice(1) : ones;
 };
 
 for (const matches of cases) {
