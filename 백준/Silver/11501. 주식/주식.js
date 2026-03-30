@@ -7,25 +7,16 @@ const cases = input
   .map(v => v.split(" ").map(Number));
 
 for (const prices of cases) {
-  const n = prices.length;
-  const suffixMax = new Array(n).fill(-Infinity);
-  for (let i = n - 2; i >= 0; i--) {
-    suffixMax[i] = Math.max(prices[i + 1], suffixMax[i + 1]);
-  }
+  let max = 0;
+  let profit = 0;
 
-  let stockSum = 0,
-    stockCount = 0,
-    profit = 0;
-  prices.forEach((price, i) => {
-    if (price < suffixMax[i]) {
-      stockSum += price;
-      stockCount++;
+  for (let i = prices.length - 1; i >= 0; i--) {
+    if (prices[i] > max) {
+      max = prices[i];
     } else {
-      profit += price * stockCount - stockSum;
-      stockSum = 0;
-      stockCount = 0;
+      profit += max - prices[i];
     }
-  });
+  }
 
   console.log(profit);
 }
