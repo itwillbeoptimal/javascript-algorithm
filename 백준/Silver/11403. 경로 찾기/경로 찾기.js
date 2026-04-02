@@ -2,32 +2,18 @@ const fs = require("fs");
 const input = fs.readFileSync(0, "utf-8").trim().split("\n");
 
 const n = Number(input[0]);
-const graph = input.slice(1).map(rows => rows.split(" ").map(Number));
-const answer = [];
+const graph = input.slice(1).map(row => row.split(" ").map(Number));
 
-const bfs = start => {
-  let head = 0;
-  const queue = [start];
-  const connected = Array(n).fill(0);
-
-  while (queue.length > head) {
-    let current = queue[head++];
-
-    for (let i = 0; i < n; i++) {
-      if (graph[current][i] && !connected[i]) {
-        connected[i] = 1;
-        queue.push(i);
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < n; j++) {
+    for (let k = 0; k < n; k++) {
+      if (graph[j][i] && graph[i][k]) {
+        graph[j][k] = 1;
       }
     }
   }
-
-  answer.push(connected);
-};
-
-for (let i = 0; i < n; i++) {
-  bfs(i);
 }
 
-for (const row of answer) {
+for (const row of graph) {
   console.log(row.join(" "));
 }
