@@ -1,21 +1,18 @@
 function solution(schedules, timelogs, startday) {
     let answer = 0;
-    let n = schedules.length;
-    
-    for (let i = 0; i < n; i++) {
-        const schedule = schedules[i];
-        let deadline = schedule + 10;
-        if (Number(String(deadline).slice(-2)) > 59) {
-            deadline = deadline + 40;
+    for (let i = 0; i < schedules.length; i++) {
+        let deadline = schedules[i] + 10;
+        if (deadline % 100 > 59) {
+            deadline += 40;
         }
-        let lateLogs = timelogs[i].filter((time, index) => {
-            let today = startday + index;
-            if (today % 7 === 6 || today % 7 === 0) return false;
-            if (time <= deadline) return false;
-            return true;
+        const isLate = timelogs[i].some((time, index) => {
+            const day = startday + index;
+            if (day % 7 === 6 || day % 7 === 0) {
+                return false;
+            }
+            return time > deadline;
         });
-        if (!lateLogs.length) answer += 1;
+        if (!isLate) answer++;
     }
-    
     return answer;
 }

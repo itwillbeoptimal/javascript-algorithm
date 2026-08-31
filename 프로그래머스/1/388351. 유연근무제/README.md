@@ -1,10 +1,10 @@
 # [level 1] 유연근무제 - 388351 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/388351?language=javascript) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/388351) 
 
 ### 성능 요약
 
-메모리: 44.7 MB, 시간: 0.73 ms
+메모리: 44.4 MB, 시간: 0.64 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 08월 18일 00:51:03
+2026년 08월 31일 14:32:44
 
 ### 문제 설명
 
