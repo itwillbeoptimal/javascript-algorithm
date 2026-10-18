@@ -1,9 +1,6 @@
 function solution(numbers) {
-  const n = numbers.length;
-  const result = Array(n).fill(0);
-
-  const toFullBinaryTree = (n) => {
-    let binary = n.toString(2);
+  const toFullBinaryTree = (num) => {
+    const binary = num.toString(2);
     let length = 1;
 
     while (length < binary.length) {
@@ -13,28 +10,19 @@ function solution(numbers) {
     return binary.padStart(length, "0");
   };
 
-  const isValidTree = (tree) => {
-    const { length } = tree;
-    const mid = Math.floor(length / 2);
+  const isValidTree = (tree, start, end, parentIsZero) => {
+    if (start > end) return true;
 
-    if (length === 1) return true;
+    const mid = Math.floor((start + end) / 2);
+    const isZero = tree[mid] === "0";
 
-    const left = tree.slice(0, mid);
-    const right = tree.slice(mid + 1);
+    if (parentIsZero && !isZero) return false;
 
-    if (tree[mid] === 0) {
-      if (left.includes(1) || right.includes(1)) {
-        return false;
-      }
-    }
-
-    return isValidTree(left) && isValidTree(right);
+    return isValidTree(tree, start, mid - 1, isZero) && isValidTree(tree, mid + 1, end, isZero);
   };
 
-  numbers.forEach((n, i) => {
-    const fullBinaryTree = toFullBinaryTree(n).split("").map(Number);
-    result[i] = isValidTree(fullBinaryTree) ? 1 : 0;
+  return numbers.map((num) => {
+    const tree = toFullBinaryTree(num);
+    return isValidTree(tree, 0, tree.length - 1, false) ? 1 : 0;
   });
-
-  return result;
 }
