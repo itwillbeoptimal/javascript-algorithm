@@ -13,12 +13,14 @@ function solution(storage, requests) {
     }
   }
 
-  const isReachable = (y, x) => {
+  const takeOut = target => {
     const queue = [[0, 0]];
     const visited = Array.from({ length: height + 2 }, () => Array(width + 2).fill(false));
     let head = 0;
     visited[0][0] = true;
-
+    
+    const stack = [];
+    
     while (queue.length > head) {
       const current = queue[head++];
 
@@ -27,8 +29,10 @@ function solution(storage, requests) {
         const nx = current[1] + dx[i];
 
         if (ny >= 0 && ny < height + 2 && nx >= 0 && nx < width + 2 && !visited[ny][nx]) {
-          if (ny === y && nx === x) {
-            return true;
+          if (board[ny][nx] === target) {
+            out++;
+            visited[ny][nx] = true;
+            stack.push([ny, nx]);
           } else if (board[ny][nx] === "*") {
             visited[ny][nx] = true;
             queue.push([ny, nx]);
@@ -37,7 +41,10 @@ function solution(storage, requests) {
       }
     }
 
-    return false;
+    while (stack.length) {
+      const [y, x] = stack.pop();
+      board[y][x] = "*";
+    }
   };
 
   for (let k = 0; k < requests.length; k++) {
@@ -54,21 +61,7 @@ function solution(storage, requests) {
         }
       }
     } else {
-      const stack = [];
-
-      for (let i = 1; i <= height; i++) {
-        for (let j = 1; j <= width; j++) {
-          if (board[i][j] === target && isReachable(i, j)) {
-            stack.push([i, j]);
-            out++;
-          }
-        }
-      }
-
-      while (stack.length) {
-        const [y, x] = stack.pop();
-        board[y][x] = "*";
-      }
+      takeOut(target);
     }
   }
 
