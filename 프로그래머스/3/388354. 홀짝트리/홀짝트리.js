@@ -35,24 +35,20 @@ function solution(nodes, edges) {
     }
     
     for (const tree of trees) {
-        if (tree.length === 1) {
-            answer[0]++;
-            continue;
-        }
-        
         const isOddEven = Array(tree.length).fill(false);
         
         tree.forEach((node, i) => {
-           if (node % 2 === (graph[node].length - 1) % 2) {
+           if (node % 2 !== graph[node].length % 2) {
                isOddEven[i] = true;
            }
         });
         
+        const oddEvenNodes = isOddEven.filter(e => e).length;
         
-        if (isOddEven.filter(e => !e).length === 1) {
+        if (tree.length - oddEvenNodes === 1) {
             answer[0]++;
         } 
-        if (isOddEven.filter(e => e).length === 1) {
+        if (oddEvenNodes === 1) {
             answer[1]++;
         }
     }
