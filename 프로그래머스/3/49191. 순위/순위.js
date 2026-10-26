@@ -1,24 +1,47 @@
 function solution(n, results) {
-  const graph = Array.from({ length: n + 1 }, (_, i) =>
-    Array.from({ length: n + 1 }, (_, j) => (i === j ? 0 : Infinity))
-  );
+  let answer = 0;
+
+  const winGraph = Array.from({ length: n + 1 }, () => []);
+  const loseGraph = Array.from({ length: n + 1 }, () => []);
 
   results.forEach(([winner, loser]) => {
-    graph[winner][loser] = 1;
-    graph[loser][winner] = -1;
+    winGraph[winner].push(loser);
+    loseGraph[loser].push(winner);
   });
 
-  for (let mid = 1; mid <= n; mid++) {
-    for (let start = 1; start <= n; start++) {
-      for (let end = 1; end <= n; end++) {
-        if (graph[start][mid] === 1 && graph[mid][end] === 1) graph[start][end] = 1;
-        if (graph[start][mid] === -1 && graph[mid][end] === -1) graph[start][end] = -1;
+  const visited = Array(n + 1).fill(false);
+
+  for (let i = 1; i <= n; i++) {
+    const winQueue = [i];
+    const loseQueue = [i];
+    const visited = Array(n + 1).fill(false);
+    visited[0] = true;
+    visited[i] = true;
+    let head = 0;
+
+    while (winQueue.length > head) {
+      const current = winQueue[head++];
+      for (const next of winGraph[current]) {
+        if (!visited[next]) {
+          winQueue.push(next);
+          visited[next] = true;
+        }
       }
     }
+
+    head = 0;
+    while (loseQueue.length > head) {
+      const current = loseQueue[head++];
+      for (const next of loseGraph[current]) {
+        if (!visited[next]) {
+          loseQueue.push(next);
+          visited[next] = true;
+        }
+      }
+    }
+
+    if (visited.every(e => e)) answer++;
   }
 
-  return graph
-    .slice(1)
-    .filter((row) => row.slice(1).every((result) => result !== Infinity))
-    .length;
+  return answer;
 }
